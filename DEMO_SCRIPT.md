@@ -1,59 +1,146 @@
 # Liesson — 3-minute demo video script
 
-## 0:00–0:20 — The hook
+Record against https://liesson.vercel.app. Timings are targets, not
+hard cuts — pace to how you actually talk, but don't let any section run
+long; the "How Codex was used" and "How GPT-5.6 was used" sections are
+the two the judges are explicitly scoring, so protect that time over the
+cold open.
 
-**On screen:** Liesson landing page. Let the onboarding overlay appear.
+---
 
-**Voiceover:**
+## 0:00–0:15 — The hook
 
-"Most education apps teach you facts. Liesson does something more active: it lies to you—carefully—and asks you to catch the lies. Every micro-lesson is mostly accurate, with one to three deliberate errors hidden inside."
-
-**Action:** Click “I’m ready to investigate,” type `photosynthesis`, then click “Try a lesson.”
-
-## 0:20–0:55 — The working learning loop
-
-**On screen:** The animated GPT-5.6 lesson-generation state, then the lesson.
+**On screen:** Liesson landing page, onboarding overlay visible.
 
 **Voiceover:**
 
-"There is no login. Liesson remembers an anonymous learner’s difficulty tier in local storage. While GPT-5.6 creates the lesson, the app shows the generation stages. When it’s ready, I read each tappable sentence like a skeptical student."
+"Every education app teaches by telling you true things. Liesson does
+the opposite — it serves you a short lesson that's *mostly* true, hides
+one to three deliberate errors inside it, and you learn by catching the
+lies. Reading it adversarially is the whole mechanic."
 
-**Action:** Tap a suspicious non-adjacent sentence; show the animated reason field. Enter a concise reason. Optionally flag a second sentence, then submit.
+---
 
-## 0:55–1:30 — GPT-5.6 is in the product loop
+## 0:15–0:40 — The core loop, fast
 
-**On screen:** Scoring/loading state, then results and revealed corrections.
-
-**Voiceover:**
-
-"GPT-5.6 is not a decorative feature here. The lesson route calls the OpenAI Responses API with Structured Outputs, using a strict schema. The model writes the lesson, records every planted error, and that ground truth stays in an encrypted, httpOnly cookie—not in the browser."
-
-"On submission, the adjudication route sends the full lesson and my flags back to GPT-5.6. It can award full or partial credit based on whether my explanation is sound, penalize false accusations, and write the corrective explanation you see here."
-
-**Action:** Point at the score, a “Lie revealed” card, and the footer confirming every deliberate error was corrected.
-
-## 1:30–1:55 — Safety and adaptation
-
-**On screen:** Start another lesson or briefly show a blocked topic such as `CPR` entering no-lies quiz mode. Show the streak and tier badge.
+**On screen:** Dismiss onboarding, type "photosynthesis," hit "Try a
+lesson." Let the generation loading state show briefly.
 
 **Voiceover:**
 
-"Liesson never plants misinformation for medical, legal, or safety-sensitive topics. Those switch to an accurate no-lies quiz instead. For regular subjects, high scores raise the next error-subtlety tier; misses lower it. A streak counter makes the practice loop feel like a daily challenge."
+"Type any topic. GPT-5.6 writes a real lesson — here, six to ten
+sentences on photosynthesis, with the errors already planted and
+tracked server-side, never sent to the browser."
 
-## 1:55–2:35 — How Codex built it
+**Action:** Tap the obvious planted lie, add a one-line reason, submit.
+Show the results screen — score, the lie revealed, the correction
+stated plainly.
 
-**On screen:** Editor with `app/api/lesson/route.ts`, `app/api/adjudicate/route.ts`, `lib/session.ts`, then `app/lesson/page.tsx` and `tests/scoring.test.ts`.
+---
+
+## 0:40–1:15 — What makes this different: teacher mode
+
+**On screen:** Back to landing page. This is the newest, most
+demo-worthy part — give it real time.
 
 **Voiceover:**
 
-"I used Codex as the primary engineering agent. It scaffolded this Next.js 15 App Router application, connected the Responses API and the supplied strict schemas, built encrypted session handling, Zod validation, the PWA shell, and the mobile lesson interface."
+"Here's the part built for actual classrooms, not just trivia. A
+teacher can upload their own material — a PDF, a text file, or just
+pasted notes — and pick a lesson length: Quick, Standard, or Deep dive."
 
-"Codex also added the Framer Motion interactions, onboarding, resilient error states, Vercel configuration, and automated checks: Vitest verifies adaptive scoring and Playwright verifies the complete anonymous lesson loop."
+**Action:** Upload a short .txt or .pdf with an invented, specific
+detail (a classroom pet's name, a made-up date — something that can't
+exist in GPT-5.6's general knowledge). Submit and let the lesson
+generate.
 
-## 2:35–3:00 — Close
+**Voiceover (continued):**
 
-**On screen:** Back on a polished results page, then landing page.
+"Watch: this lesson isn't about a generic topic — it's built entirely
+from that file. GPT-5.6 is constrained to only use what's in the
+uploaded material for both the true sentences and the planted error.
+That's the difference between a trivia toy and something a teacher can
+assign against this week's actual reading."
+
+---
+
+## 1:15–1:45 — How GPT-5.6 is integrated, specifically
+
+**On screen:** Split attention between the lesson result and, briefly,
+the code — `lib/openai.ts` and `prompts/lesson-system-prompt.txt` if you
+want a code cutaway here.
 
 **Voiceover:**
 
-"Liesson turns passive reading into active error detection: notice the claim, explain what is wrong, and immediately see the correction. GPT-5.6 generates the challenge and provides the feedback loop; Codex built the product around it. Try a lesson and catch the lie."
+"GPT-5.6 — specifically the Terra tier, called through the OpenAI
+Responses API with Structured Outputs — does three jobs in this app,
+all live API calls, none of them decorative. First, it writes the
+lesson and self-verifies every non-planted sentence is actually true
+before returning anything. Second, it calibrates error subtlety to a
+five-tier taxonomy — a beginner gets an obviously wrong fact, an expert
+gets a subtly reversed cause and effect. Third, on submission, it grades
+not just *which* sentence I flagged, but whether my *stated reasoning*
+was actually correct — partial credit for the right instinct, full
+credit only for the right explanation."
+
+---
+
+## 1:45–2:10 — Safety, adaptation, and the guardrails
+
+**On screen:** Quickly show a streak/tier indicator; optionally mention
+without demoing the blocklist behavior.
+
+**Voiceover:**
+
+"Every planted error is revealed and corrected at the end — this app
+never lets a lie stand uncorrected. Medical, legal, and safety-adjacent
+topics skip lying entirely and switch to a straight comprehension quiz.
+Difficulty adapts per learner from local history, and because this is a
+public demo, GPT-5.6 calls are rate-limited per visitor and per day so
+the whole thing stays live for everyone testing it."
+
+---
+
+## 2:10–2:45 — How Codex was used
+
+**On screen:** Editor or terminal — show the Codex CLI session, or cut
+to `app/api/lesson/route.ts`, `lib/rate-limit.ts`, `lib/file-extract.ts`.
+
+**Voiceover:**
+
+"Codex was the primary engineering agent for the entire build, driven
+through the Codex CLI in one continuous session. It scaffolded the
+Next.js app, wired both OpenAI Responses API routes to the Structured
+Output schemas, and built the encrypted session handling that keeps
+planted errors off the client. It made real engineering calls on its
+own: choosing the GPT-5.6 Terra tier over the flagship model for cost
+versus quality, designing the Vercel KV sliding-window rate limiter
+before this went live publicly, and writing the Vitest coverage for
+every piece of scoring and validation logic. I reviewed and verified
+every change against a real, funded API key before it shipped."
+
+---
+
+## 2:45–3:00 — Close
+
+**On screen:** Back to a clean results screen or the landing page.
+
+**Voiceover:**
+
+"Liesson turns reading into active error-detection — you can't catch a
+lie without reasoning about the truth. GPT-5.6 is what makes lying
+*pedagogically useful* possible at all; Codex is what built the product
+around it. Try it yourself — the link's below."
+
+---
+
+## Notes before recording
+
+- Have a funded OpenAI key and confirm one live generation works before
+  hitting record — don't discover a quota error on camera.
+- The teacher-material demo is the section most likely to impress
+  judges on "idea quality" — don't rush it for time; cut from the
+  0:00–0:15 hook instead if you're running long.
+- State the actual GPT-5.6 mechanics out loud (Structured Outputs,
+  Terra tier, the three-job breakdown) — the FAQ explicitly says vague
+  "we used AI" claims score worse than specifics.
