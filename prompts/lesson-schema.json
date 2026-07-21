@@ -1,0 +1,73 @@
+{
+  "name": "liesson_lesson",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "mode": { "type": "string", "enum": ["lies", "no_lies_quiz"] },
+      "topic": { "type": "string" },
+      "requested_difficulty_tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+      "served_difficulty_tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+      "title": { "type": "string" },
+      "sentences": {
+        "type": "array",
+        "minItems": 6,
+        "maxItems": 10,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "id": { "type": "string" },
+            "text": { "type": "string" }
+          },
+          "required": ["id", "text"]
+        }
+      },
+      "planted_errors": {
+        "type": "array",
+        "minItems": 0,
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sentence_id": { "type": "string" },
+            "error_tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+            "error_category": {
+              "type": "string",
+              "enum": ["blatant_fact", "wrong_detail", "overgeneralization", "causal_mechanism", "plausible_misattribution"]
+            },
+            "what_is_wrong": { "type": "string" },
+            "correct_version": { "type": "string" }
+          },
+          "required": ["sentence_id", "error_tier", "error_category", "what_is_wrong", "correct_version"]
+        }
+      },
+      "quiz_questions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "id": { "type": "string" },
+            "question": { "type": "string" },
+            "options": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 4 },
+            "correct_option_index": { "type": "integer" }
+          },
+          "required": ["id", "question", "options", "correct_option_index"]
+        }
+      },
+      "safety_classification": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "is_high_risk_topic": { "type": "boolean" },
+          "risk_reason": { "type": "string" }
+        },
+        "required": ["is_high_risk_topic", "risk_reason"]
+      }
+    },
+    "required": ["mode", "topic", "requested_difficulty_tier", "served_difficulty_tier", "title", "sentences", "planted_errors", "quiz_questions", "safety_classification"]
+  }
+}

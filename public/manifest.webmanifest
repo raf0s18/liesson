@@ -1,0 +1,9 @@
+{
+  "name": "Liesson — Catch the lie",
+  "short_name": "Liesson",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffaf3",
+  "theme_color": "#f45d48",
+  "description": "Micro-lessons with deliberate errors to catch."
+}

@@ -1,0 +1,32 @@
+{
+  "name": "liesson_adjudication",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "overall_score_percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "sentence_id": { "type": "string" },
+            "was_planted_error": { "type": "boolean" },
+            "user_flagged": { "type": "boolean" },
+            "verdict": {
+              "type": "string",
+              "enum": ["full_credit", "partial_credit", "miss", "false_accusation", "correct_pass"]
+            },
+            "reasoning_feedback": { "type": "string" },
+            "correct_version": { "type": "string" }
+          },
+          "required": ["sentence_id", "was_planted_error", "user_flagged", "verdict", "reasoning_feedback", "correct_version"]
+        }
+      },
+      "summary_explanation": { "type": "string" }
+    },
+    "required": ["overall_score_percent", "results", "summary_explanation"]
+  }
+}

@@ -1,0 +1,6 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { PwaRegister } from "@/components/pwa-register";
+import { Onboarding } from "@/components/onboarding";
+export default function Home() { const [topic, setTopic] = useState(""); const router = useRouter(); return <main className="shell flex flex-col justify-center gap-8"><PwaRegister /><Onboarding /><div><p className="font-bold text-[var(--coral)] tracking-widest uppercase">A suspicious education app</p><h1 className="mt-2 text-5xl font-black leading-none">Liesson lies<br />to you.</h1><p className="mt-5 text-lg leading-relaxed">Every 60-second lesson has a few planted errors. Tap the claims that do not belong, then learn the truth.</p></div><form className="card p-5" onSubmit={(event) => { event.preventDefault(); if (topic.trim()) router.push(`/lesson?topic=${encodeURIComponent(topic.trim())}`); }}><label className="font-bold" htmlFor="topic">What do you want to learn?</label><input id="topic" value={topic} onChange={(event) => setTopic(event.target.value)} placeholder="e.g. photosynthesis" className="mt-3 w-full rounded-xl border-2 border-[var(--ink)] p-3" /><button className="button mt-4 w-full" type="submit">Try a lesson →</button><p className="mt-3 text-sm">No account. Your difficulty adapts on this device.</p></form></main>; }
