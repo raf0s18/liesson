@@ -8,6 +8,8 @@ import { nextDifficulty } from "@/lib/scoring";
 
 const TIER = "liesson-difficulty-tier";
 const STREAK = "liesson-streak";
+const SOURCE_MATERIAL_KEY = "liesson-source-material";
+const SENTENCE_COUNT_KEY = "liesson-sentence-count";
 const tier = () => Math.max(1, Math.min(5, Number(localStorage.getItem(TIER) || 1)));
 const messageFor = (error: unknown, fallback: string) => error instanceof Error ? error.message : fallback;
 const responseMessage = (response: Response, body: { error?: string; message?: string }, fallback: string) => response.status === 429 ? body.message || fallback : body.error || fallback;
@@ -30,7 +32,10 @@ function LessonPlayer() {
     const timer = window.setInterval(() => { index = Math.min(index + 1, steps.length - 1); setPhase(steps[index]); }, 1300);
     (async () => {
       try {
-        const response = await fetch("/api/lesson", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ topic, difficultyTier: tier() }) });
+        const sourceMaterial = sessionStorage.getItem(SOURCE_MATERIAL_KEY)?.trim() || undefined;
+        const savedCount = Number(sessionStorage.getItem(SENTENCE_COUNT_KEY));
+        const sentenceCount = savedCount === 6 || savedCount === 10 ? savedCount : 8;
+        const response = await fetch("/api/lesson", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ topic, difficultyTier: tier(), sourceMaterial, sentenceCount }) });
         const body = await response.json().catch(() => ({}));
         if (!response.ok) throw new Error(responseMessage(response, body, "We couldn’t create that lesson. Please try again."));
         setLesson(lessonResponseSchema.parse(body).lesson);

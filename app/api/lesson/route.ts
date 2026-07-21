@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const body = lessonRequestSchema.parse(await request.json());
     const limit = await enforceRateLimit(request);
     if (!limit.allowed) return NextResponse.json(demoLimitResponse(), { status: 429 });
-    const lesson = await generateLesson(body.topic, body.difficultyTier, isBlockedTopic(body.topic));
+    const lesson = await generateLesson(body.topic, body.difficultyTier, isBlockedTopic(body.topic), body.sourceMaterial, body.sentenceCount);
     await saveLesson(lesson);
     return NextResponse.json(lessonResponseSchema.parse({ lesson: { ...lesson, planted_errors: undefined } }));
   } catch (error) {

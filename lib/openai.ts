@@ -19,9 +19,12 @@ async function structured<T>(instructions: string, input: string, format: { name
   if (!response.output_text) throw new Error("The model returned no structured output.");
   return parse(JSON.parse(response.output_text));
 }
-export async function generateLesson(topic: string, difficultyTier: number, forceNoLies: boolean) {
-  const input = JSON.stringify({ topic, requested_difficulty_tier: difficultyTier, ...(forceNoLies ? { force_no_lies_quiz: true, note: "This topic matches the application's high-risk blocklist. Use no_lies_quiz mode." } : {}) });
-  return structured(await prompt("lesson-system-prompt.txt"), input, lessonFormat, (value) => lessonSchema.parse(value));
+export async function generateLesson(topic: string, difficultyTier: number, forceNoLies: boolean, sourceMaterial: string | undefined, sentenceCount: 6 | 8 | 10) {
+  const format = structuredClone(lessonFormat);
+  format.schema.properties.sentences.minItems = sentenceCount;
+  format.schema.properties.sentences.maxItems = sentenceCount;
+  const input = JSON.stringify({ topic, requested_difficulty_tier: difficultyTier, requested_sentence_count: sentenceCount, ...(sourceMaterial ? { source_material: sourceMaterial } : {}), ...(forceNoLies ? { force_no_lies_quiz: true, note: "This topic matches the application's high-risk blocklist. Use no_lies_quiz mode." } : {}) });
+  return structured(await prompt("lesson-system-prompt.txt"), input, format, (value) => lessonSchema.parse(value));
 }
 export async function adjudicateLesson(lesson: FullLesson, flags: unknown) {
   const input = JSON.stringify({ lesson, learner_submission: { flags } });

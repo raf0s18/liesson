@@ -17,7 +17,7 @@
 
 ## What's unique
 
-Learning-science research consistently shows that error detection and correction ("erroneous examples") produces deeper encoding than studying correct material — but no consumer app has ever made *the lie itself* the core mechanic. Liesson isn't a quiz app with distractors; the entire lesson is the test, and reading it adversarially is the point. This mechanic is only possible now: it requires a model that can generate *calibrated, pedagogically useful* falsehoods on any topic on demand, grade free-form justifications, and never lose track of which statements were the planted lies. That's the GPT-5.6 layer, and it's irreplaceable — not incidental.
+Learning-science research consistently shows that error detection and correction ("erroneous examples") produces deeper encoding than studying correct material — but no consumer app has ever made *the lie itself* the core mechanic. Liesson isn't a quiz app with distractors; the entire lesson is the test, and reading it adversarially is the point. Teachers can also paste their own class material and choose a six-, eight-, or ten-sentence lesson; in custom-material mode, the model is constrained to that supplied text. This mechanic is only possible now: it requires a model that can generate *calibrated, pedagogically useful* falsehoods on demand, grade free-form justifications, and never lose track of which statements were the planted lies. That's the GPT-5.6 layer, and it's irreplaceable — not incidental.
 
 ## Built with
 
@@ -33,6 +33,7 @@ Codex was the primary engineering agent for this project:
 - **Demo polish:** added Framer Motion flag and reveal transitions, a first-visit onboarding overlay, staged GPT-5.6 generation/scoring states, persistent local streaks, and friendly retry-safe API errors.
 - **Verification and deploy setup:** wrote Vitest adaptive-scoring tests and a Playwright anonymous lesson-loop test, resolved build/type issues, added `vercel.json`, and verified the production build.
 - **Public-demo safeguards:** selected the GPT-5.6 Terra runtime model and added Vercel KV sliding-window visitor limits plus a shared daily model-call budget before either OpenAI route can run.
+- **Teacher controls:** added optional teacher-supplied material with server-enforced size validation and grounding instructions, plus exact Quick, Standard, and Deep dive lesson-length presets backed by per-request Structured Output schemas.
 
 Primary build session: `/feedback` Codex Session ID — `019f848a-f86d-7892-8c1e-cf243568c284`
 
@@ -49,4 +50,3 @@ Every one of these is a live API call at runtime — GPT-5.6 isn't consulted onc
 ## Safety: lying responsibly
 
 Planted errors are always revealed and corrected at the end of every lesson — the app never lets a lie stand. Topics matching a medical/legal/safety blocklist route to a "no-lies mode" (straight quiz) instead. Every lesson footer shows "This lesson contained N deliberate errors, all corrected above."
-
