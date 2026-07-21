@@ -2,16 +2,11 @@
 
 > Every lesson contains deliberate mistakes. You learn by catching them.
 
-**Repository:** `REPLACE_WITH_PUBLIC_REPOSITORY_URL`
-**Live demo:** `REPLACE_WITH_DEPLOYED_VERCEL_URL` *(no login required — tap "Try a lesson")*
+
 **Demo video:** https://youtu.be/YOUR_VIDEO_ID
 **Track:** Education
 
 ---
-
-## Elevator pitch
-
-Every learning app on earth teaches by telling you true things and hoping they stick. Liesson does the opposite: it serves 60-second micro-lessons on any topic you choose — each one seeded with 1–3 deliberate, plausible mistakes calibrated to the edge of your current understanding. Your job is to catch the lies. Error-detection forces active processing in a way passive reading never does: you can't spot a wrong fact without actually reasoning about the right one. GPT-5.6 is the "unreliable professor" — it writes the lesson, plants the lies at exactly your skill level, adjudicates your catches, and explains what you missed. The better you get, the subtler it lies.
 
 ## How it works
 
@@ -55,20 +50,3 @@ Every one of these is a live API call at runtime — GPT-5.6 isn't consulted onc
 
 Planted errors are always revealed and corrected at the end of every lesson — the app never lets a lie stand. Topics matching a medical/legal/safety blocklist route to a "no-lies mode" (straight quiz) instead. Every lesson footer shows "This lesson contained N deliberate errors, all corrected above."
 
-## Run it locally
-
-```bash
-git clone REPLACE_WITH_PUBLIC_REPOSITORY_URL
-cd liesson
-cp .env.example .env.local   # add OPENAI_API_KEY and LESSON_COOKIE_SECRET
-npm install
-npm run dev                  # http://localhost:3000
-npm test                     # Vitest unit tests
-npx playwright test          # E2E lesson-loop test
-```
-
-Judges: the deployed demo at the link above requires no account — anonymous sessions store difficulty state locally.
-
-## License
-
-MIT
