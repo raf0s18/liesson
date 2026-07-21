@@ -2,16 +2,12 @@
 
 > Every lesson contains deliberate mistakes. You learn by catching them.
 
-**Repository:** `REPLACE_WITH_PUBLIC_REPOSITORY_URL`
+**Repository:** https://github.com/raf0s18/liesson
 **Live demo:** `REPLACE_WITH_DEPLOYED_VERCEL_URL` *(no login required — tap "Try a lesson")*
 **Demo video:** https://youtu.be/YOUR_VIDEO_ID
 **Track:** Education
 
 ---
-
-## Elevator pitch
-
-Every learning app on earth teaches by telling you true things and hoping they stick. Liesson does the opposite: it serves 60-second micro-lessons on any topic you choose — each one seeded with 1–3 deliberate, plausible mistakes calibrated to the edge of your current understanding. Your job is to catch the lies. Error-detection forces active processing in a way passive reading never does: you can't spot a wrong fact without actually reasoning about the right one. GPT-5.6 is the "unreliable professor" — it writes the lesson, plants the lies at exactly your skill level, adjudicates your catches, and explains what you missed. The better you get, the subtler it lies.
 
 ## How it works
 
@@ -27,7 +23,7 @@ Learning-science research consistently shows that error detection and correction
 
 ## Built with
 
-`typescript` `react` `nextjs` `tailwindcss` `nodejs` `vercel` `openai-api` `gpt-5.6` `responses-api` `codex` `structured-outputs` `zod` `pwa` `vitest` `playwright` `framer-motion`
+`typescript` `react` `nextjs` `tailwindcss` `nodejs` `vercel` `vercel-kv` `openai-api` `gpt-5.6` `responses-api` `codex` `structured-outputs` `zod` `pwa` `vitest` `playwright` `framer-motion`
 
 ## How Codex was used
 
@@ -38,6 +34,7 @@ Codex was the primary engineering agent for this project:
 - **Safety and adaptation:** added Zod validation at every API boundary, a medical/legal/safety topic blocklist that switches to an accurate no-lies quiz, and anonymous local difficulty tiers that move up or down from results.
 - **Demo polish:** added Framer Motion flag and reveal transitions, a first-visit onboarding overlay, staged GPT-5.6 generation/scoring states, persistent local streaks, and friendly retry-safe API errors.
 - **Verification and deploy setup:** wrote Vitest adaptive-scoring tests and a Playwright anonymous lesson-loop test, resolved build/type issues, added `vercel.json`, and verified the production build.
+- **Public-demo safeguards:** selected the GPT-5.6 Terra runtime model and added Vercel KV sliding-window visitor limits plus a shared daily model-call budget before either OpenAI route can run.
 
 Primary build session: `/feedback` Codex Session ID — `019f848a-f86d-7892-8c1e-cf243568c284`
 
@@ -58,7 +55,7 @@ Planted errors are always revealed and corrected at the end of every lesson — 
 ## Run it locally
 
 ```bash
-git clone REPLACE_WITH_PUBLIC_REPOSITORY_URL
+git clone https://github.com/raf0s18/liesson.git
 cd liesson
 cp .env.example .env.local   # add OPENAI_API_KEY and LESSON_COOKIE_SECRET
 npm install
@@ -68,7 +65,3 @@ npx playwright test          # E2E lesson-loop test
 ```
 
 Judges: the deployed demo at the link above requires no account — anonymous sessions store difficulty state locally.
-
-## License
-
-MIT

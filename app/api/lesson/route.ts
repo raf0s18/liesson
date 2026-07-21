@@ -4,11 +4,14 @@ import { generateLesson } from "@/lib/openai";
 import { lessonRequestSchema, lessonResponseSchema } from "@/lib/schemas";
 import { isBlockedTopic } from "@/lib/safety";
 import { saveLesson } from "@/lib/session";
+import { demoLimitResponse, enforceRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export async function POST(request: Request) {
   try {
     const body = lessonRequestSchema.parse(await request.json());
+    const limit = await enforceRateLimit(request);
+    if (!limit.allowed) return NextResponse.json(demoLimitResponse(), { status: 429 });
     const lesson = await generateLesson(body.topic, body.difficultyTier, isBlockedTopic(body.topic));
     await saveLesson(lesson);
     return NextResponse.json(lessonResponseSchema.parse({ lesson: { ...lesson, planted_errors: undefined } }));

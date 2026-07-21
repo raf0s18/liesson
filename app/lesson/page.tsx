@@ -10,6 +10,7 @@ const TIER = "liesson-difficulty-tier";
 const STREAK = "liesson-streak";
 const tier = () => Math.max(1, Math.min(5, Number(localStorage.getItem(TIER) || 1)));
 const messageFor = (error: unknown, fallback: string) => error instanceof Error ? error.message : fallback;
+const responseMessage = (response: Response, body: { error?: string; message?: string }, fallback: string) => response.status === 429 ? body.message || fallback : body.error || fallback;
 
 function LessonPlayer() {
   const topic = useSearchParams().get("topic") || "photosynthesis";
@@ -31,7 +32,7 @@ function LessonPlayer() {
       try {
         const response = await fetch("/api/lesson", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ topic, difficultyTier: tier() }) });
         const body = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(body.error || "We couldn’t create that lesson. Please try again.");
+        if (!response.ok) throw new Error(responseMessage(response, body, "We couldn’t create that lesson. Please try again."));
         setLesson(lessonResponseSchema.parse(body).lesson);
       } catch (caught) { setError(messageFor(caught, "We couldn’t create that lesson. Please try again.")); }
       finally { window.clearInterval(timer); setLoading(false); }
@@ -45,7 +46,7 @@ function LessonPlayer() {
     try {
       const response = await fetch("/api/adjudicate", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ flags: Object.entries(flags).map(([sentenceId, reason]) => ({ sentenceId, reason: reason || undefined })), quizAnswers: answers }) });
       const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(body.error || "We couldn’t score that lesson. Your choices are still here—please retry.");
+      if (!response.ok) throw new Error(responseMessage(response, body, "We couldn’t score that lesson. Your choices are still here—please retry."));
       const parsed = adjudicateResponseSchema.parse(body);
       setResult(parsed);
       localStorage.setItem(TIER, String(nextDifficulty(tier(), parsed.adjudication)));

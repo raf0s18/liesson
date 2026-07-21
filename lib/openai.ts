@@ -12,7 +12,8 @@ const client = () => {
 const prompt = (name: string) => readFile(path.join(process.cwd(), "prompts", name), "utf8");
 async function structured<T>(instructions: string, input: string, format: { name: string; strict: boolean; schema: object }, parse: (value: unknown) => T): Promise<T> {
   const response = await client().responses.create({
-    model: "gpt-5.6", instructions, input,
+    // Verify this model ID against the first funded production API response.
+    model: "gpt-5.6-terra", instructions, input,
     text: { format: { type: "json_schema", name: format.name, strict: format.strict, schema: format.schema } as never },
   });
   if (!response.output_text) throw new Error("The model returned no structured output.");

@@ -12,6 +12,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@vercel/kv": "^3.0.0",
     "next": "^15.3.3",
     "framer-motion": "^12.23.12",
     "openai": "^4.104.0",

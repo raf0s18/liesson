@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import { adjudicateLesson } from "@/lib/openai";
 import { adjudicateRequestSchema, adjudicateResponseSchema, type Adjudication } from "@/lib/schemas";
 import { clearLesson, getLesson } from "@/lib/session";
+import { demoLimitResponse, enforceRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 function quizAdjudication(lesson: NonNullable<Awaited<ReturnType<typeof getLesson>>>, answers: Record<string, number>): Adjudication {
@@ -17,6 +18,8 @@ export async function POST(request: Request) {
     if (!lesson) return NextResponse.json({ error: "Your lesson session expired. Please start a new lesson." }, { status: 401 });
     const ids = new Set(lesson.sentences.map((sentence) => sentence.id));
     if (submission.flags.some((flag) => !ids.has(flag.sentenceId))) return NextResponse.json({ error: "A flagged sentence does not belong to this lesson." }, { status: 400 });
+    const limit = await enforceRateLimit(request);
+    if (!limit.allowed) return NextResponse.json(demoLimitResponse(), { status: 429 });
     const adjudication = lesson.mode === "no_lies_quiz" ? quizAdjudication(lesson, submission.quizAnswers ?? {}) : await adjudicateLesson(lesson, submission.flags);
     const response = adjudicateResponseSchema.parse({ adjudication, plantedErrors: lesson.planted_errors, mode: lesson.mode });
     await clearLesson();
