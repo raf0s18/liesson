@@ -23,15 +23,15 @@ describe("KV rate limiting", () => {
     await expect(enforceRateLimit(request, client, now)).resolves.toEqual({ allowed: true });
   });
 
-  it("blocks an at-limit visitor before the sixth request", async () => {
+  it("blocks an at-limit visitor before the eleventh request", async () => {
     let now = 0; const client = memoryKv(() => now);
-    for (let i = 0; i < 5; i += 1) await expect(enforceRateLimit(request, client, now)).resolves.toEqual({ allowed: true });
+    for (let i = 0; i < 10; i += 1) await expect(enforceRateLimit(request, client, now)).resolves.toEqual({ allowed: true });
     await expect(enforceRateLimit(request, client, now)).resolves.toEqual({ allowed: false, reason: "visitor" });
   });
 
   it("allows the visitor again after the rolling window expires", async () => {
     let now = 0; const client = memoryKv(() => now);
-    for (let i = 0; i < 5; i += 1) await enforceRateLimit(request, client, now);
+    for (let i = 0; i < 10; i += 1) await enforceRateLimit(request, client, now);
     now = 60 * 60 * 1000 + 1;
     await expect(enforceRateLimit(request, client, now)).resolves.toEqual({ allowed: true });
   });

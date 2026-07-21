@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { kv } from "@vercel/kv";
 
-const VISITOR_LIMIT = 5;
+const VISITOR_LIMIT = 10; // 2 calls (generate + adjudicate) per full try — allows 5 full tries per visitor per hour
 const GLOBAL_LIMIT = 150;
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_SECONDS = 24 * 60 * 60;
