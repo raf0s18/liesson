@@ -2,8 +2,6 @@
 
 > Every lesson contains deliberate mistakes. You learn by catching them.
 
-**Repository:** https://github.com/raf0s18/liesson
-**Live demo:** `REPLACE_WITH_DEPLOYED_VERCEL_URL` *(no login required — tap "Try a lesson")*
 **Demo video:** https://youtu.be/YOUR_VIDEO_ID
 **Track:** Education
 
@@ -52,16 +50,3 @@ Every one of these is a live API call at runtime — GPT-5.6 isn't consulted onc
 
 Planted errors are always revealed and corrected at the end of every lesson — the app never lets a lie stand. Topics matching a medical/legal/safety blocklist route to a "no-lies mode" (straight quiz) instead. Every lesson footer shows "This lesson contained N deliberate errors, all corrected above."
 
-## Run it locally
-
-```bash
-git clone https://github.com/raf0s18/liesson.git
-cd liesson
-cp .env.example .env.local   # add OPENAI_API_KEY and LESSON_COOKIE_SECRET
-npm install
-npm run dev                  # http://localhost:3000
-npm test                     # Vitest unit tests
-npx playwright test          # E2E lesson-loop test
-```
-
-Judges: the deployed demo at the link above requires no account — anonymous sessions store difficulty state locally.
